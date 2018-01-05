@@ -31,7 +31,7 @@ function setOtherParams(obj) {
 	otherParams = obj;
 }
 
-function makePayment(res) {
+function makePayment(reply) {
 	var errors = helper.checkRequiredField(config);
 	if(errors.length > 0) {
 		throw new Error(errors);	
@@ -56,13 +56,7 @@ function makePayment(res) {
 	          "document.getElementById('checkout').submit();" +
 	      "</script>";
 
-  	res.writeHead(200, {
-        'Content-Length': Buffer.byteLength(body),
-        'Content-Type': 'text/html'
-    });
-
-  	res.write(body);
-  	res.end();
+  	reply(body);
 }
 
 function paymentRedirect(req) {
