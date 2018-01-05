@@ -1,60 +1,70 @@
-# node-ccavenue
-node-ccavenue is a ccavenue payment gateway integration for node js.
+# hapi-ccavenue
+hapi-ccavenue is a ccavenue payment gateway integration for hapijs.
 
 # Usage
 
 ```javascript
-var ccavenue = require('ccavenue');
+var ccavenue = require('hapi-ccavenue');
 
 //required
 ccavenue.setMerchant("Merchant Id");
 ccavenue.setWorkingKey("Working Key");
-ccavenue.setOrderId("Order Id");
 ccavenue.setRedirectUrl("Redirect Url");
-ccavenue.setOrderAmount("Order Amount");
-
 
 You can also send customer info (Optional).
-
-var param = {
-  billing_cust_address: 'Bangalore', 
-  billing_cust_name: 'Nitish Kumar'
-};
-ccavenue.setOtherParams(param); //Set Customer Info
-
 
 For more detail 
 https://world.ccavenue.com/downloads/CCAVenueWorldIntegrationManual.pdf
 
 
 // Server url where you want to send data to ccavenue
-server.get('/make-payment', function(req, res) {
-  ccavenue.makePayment(res); // It will redirect to ccavenue payment
+server.route({
+    method: 'GET',
+    path: '/make-payment',
+    handler: function(request, reply) {
+        var param = {
+            billing_cust_address: 'Bangalore',
+            billing_cust_name: 'Nitish Kumar'
+        }; //It would be better to receive these values from the request
+        ccavenue.setOtherParams(param); //Set Customer Info
+        ccavenue.setOrderAmount("<------Amount---->");
+        ccavenue.setOrderId("<----------Order Id---------->"); //To be generated
+        ccavenue.makePayment(reply);
+    }
+
 });
 
 // Server url should be as redirect url (which you are passing as Redirect Url).
-server.post('/redirect-url', function response(req, res) {
-  var data = ccavenue.paymentRedirect(req); //It will get response from ccavenue payment.
+server.route({
+    method: 'POST',
+    path: '/redirect-link',
+    handler: function(request, reply) {
+        var data = ccavenue.paymentRedirect(req); //It will get response from ccavenue payment.
 
-  if(data.isCheckSumValid == true && data.AuthDesc == 'Y') {
-      // Success
-      // Your code
-  } else if(data.isCheckSumValid == true && data.AuthDesc == 'N') {
-      // Unuccessful
-      // Your code
-  } elseif(data.isCheckSumValid == true && data.AuthDesc == 'B') {
-      // Batch processing mode
-      // Your code
-  } else {
-      // Illegal access
-      // Your code
-  }
+        if (data.isCheckSumValid == true && data.AuthDesc == 'Y') {
+            // Success
+            // Your code
+        } else if (data.isCheckSumValid == true && data.AuthDesc == 'N') {
+            // Unuccessful
+            // Your code
+        }
+        elseif(data.isCheckSumValid == true && data.AuthDesc == 'B') {
+            // Batch processing mode
+            // Your code
+        } else {
+            // Illegal access
+            // Your code
+        }
+
+    }
 });
 
 For more detail 
 https://world.ccavenue.com/downloads/CCAVenueWorldIntegrationManual.pdf
 
 ```
+# Express Users
+Express users can check this [link]() out by Nitesh Kumar Singh.
 
 # CCAVenue Manual
 
@@ -62,14 +72,14 @@ https://world.ccavenue.com/downloads/CCAVenueWorldIntegrationManual.pdf
     
 # Installation
 
-    $ npm install ccavenue
+    $ npm install hapi-ccavenue
     
     
     
 ## License
 
 The MIT License (MIT)
-Copyright (c) 2015 Nitish Kumar
+Copyright (c) 2017 Satnam Sandhu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -91,5 +101,5 @@ SOFTWARE.
 
 ## Bugs
 
-See <https://github.com/nitishkumarsingh13/node-ccavenue/issues>.
+See <https://github.com/satnam-sandhu/hapi-ccavenue/issues>.
     
