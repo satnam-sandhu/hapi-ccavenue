@@ -26,6 +26,7 @@ server.route({
             billing_cust_address: 'Bangalore',
             billing_cust_name: 'Nitish Kumar'
         }; //It would be better to receive these values from the request
+        
         ccavenue.setOtherParams(param); //Set Customer Info
         ccavenue.setOrderAmount("<------Amount---->");
         ccavenue.setOrderId("<----------Order Id---------->"); //To be generated
@@ -39,7 +40,7 @@ server.route({
     method: 'POST',
     path: '/redirect-link',
     handler: function(request, reply) {
-        var data = ccavenue.paymentRedirect(req); //It will get response from ccavenue payment.
+        var data = ccavenue.paymentRedirect(request); //It will get response from ccavenue payment.
 
         if (data.isCheckSumValid == true && data.AuthDesc == 'Y') {
             // Success
@@ -55,7 +56,6 @@ server.route({
             // Illegal access
             // Your code
         }
-
     }
 });
 
