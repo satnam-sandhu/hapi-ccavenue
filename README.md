@@ -45,14 +45,16 @@ server.route({
         if (data.isCheckSumValid == true && data.AuthDesc == 'Y') {
             // Success
             // Your code
-        } else if (data.isCheckSumValid == true && data.AuthDesc == 'N') {
+        }
+        else if (data.isCheckSumValid == true && data.AuthDesc == 'N') {
             // Unuccessful
             // Your code
         }
-        elseif(data.isCheckSumValid == true && data.AuthDesc == 'B') {
+        else if(data.isCheckSumValid == true && data.AuthDesc == 'B') {
             // Batch processing mode
             // Your code
-        } else {
+        }
+        else {
             // Illegal access
             // Your code
         }
